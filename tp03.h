@@ -22,6 +22,9 @@ struct AvlNode* deleteNode(struct AvlNode *p,int data);
 
 struct AvlNode* findMax(struct AvlNode *p);
 struct AvlNode* findMin(struct AvlNode *q);
-void printPost(struct AvlNode *head);
-
+void printPostOrder(struct AvlNode *head);
+void printPreOrder(struct AvlNode *head);
+void printInOrder(struct AvlNode *head);
+int getBalance(struct AvlNode *p);
+int treeHeight(struct AvlNode *p);
 #endif

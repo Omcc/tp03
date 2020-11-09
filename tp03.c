@@ -33,7 +33,7 @@ struct AvlNode* insertAvl(struct AvlNode *p,int data)
 	{
 		return LLRotate(p);
 	}
-	else if(getBalance(p)==2 && getBalance(p->leftChild)==-1)
+	else if(getBalance(p)==2 && (getBalance(p->leftChild)==-1 || getBalance(p->leftChild)==0))
 	{
 		
 		return LRRotate(p);
@@ -43,7 +43,7 @@ struct AvlNode* insertAvl(struct AvlNode *p,int data)
 		
 		return RRRotate(p);
 	}
-	else if(getBalance(p)==-2 && getBalance(p->rightChild)==1 || getBalance(p->rightChild)==0)
+	else if(getBalance(p)==-2 && (getBalance(p->rightChild)==1 || getBalance(p->rightChild)==0))
 	{
 		return RLRotate(p);
 	}
@@ -77,7 +77,6 @@ int getBalance(struct AvlNode *p)
 
 struct AvlNode* LLRotate(struct AvlNode *p)
 {
-	printf("ll rotation");
 	struct AvlNode *pLeftChild = p->leftChild;
 	struct AvlNode *pRightChild = p->rightChild;
 	pLeftChild->rightChild=p;
@@ -92,7 +91,6 @@ struct AvlNode* LLRotate(struct AvlNode *p)
 
 struct AvlNode* RLRotate(struct AvlNode *p)
 {
-	printf("rlr rotation");
 
 	
 	struct AvlNode* pRight=p->rightChild;
@@ -117,7 +115,7 @@ struct AvlNode* RLRotate(struct AvlNode *p)
 
 struct AvlNode* RRRotate(struct AvlNode *p)
 {
-	printf("rrr rotation");
+
 	struct AvlNode* pRightChild=p->rightChild;
 	
 	p->rightChild=pRightChild->leftChild;
@@ -132,7 +130,6 @@ struct AvlNode* RRRotate(struct AvlNode *p)
 
 struct AvlNode* LRRotate(struct AvlNode *p)
 {
-	printf("lrr rotation");
 
 	struct AvlNode *pLeft = p->leftChild;
 	struct AvlNode *pLeftRight = pLeft->rightChild;
@@ -175,8 +172,7 @@ struct AvlNode* deleteNode(struct AvlNode* p,int data)
 
 
 		}
-
-
+			
 		free(p);
 		return NULL;
 	}
@@ -189,7 +185,7 @@ struct AvlNode* deleteNode(struct AvlNode* p,int data)
 
 
 
-		if(getHeight(p->leftChild) > getHeight(p->rightChild))
+		if(treeHeight(p->leftChild) > treeHeight(p->rightChild))
 		{
 			q=findMax(p->leftChild);
 			p->data=q->data;
@@ -274,17 +270,48 @@ struct AvlNode *findMin(struct AvlNode* p)
 	return p;
 
 }
-void printPost(struct AvlNode *p)
+void printPostOrder(struct AvlNode *p)
 {
 	if(!p)
 	{
 		return;
 	}
 
-	printPost(p->leftChild);
-	printPost(p->rightChild);
+	printPostOrder(p->leftChild);
+	printPostOrder(p->rightChild);
 	printf("%d ",p->data);
 }
 
+void printPreOrder(struct AvlNode *p)
+{
+	if(!p)
+	{
+		return;
+	}
 
+	printf("%d ",p->data);
+	printPreOrder(p->leftChild);
+	printPreOrder(p->rightChild);
+}
+
+void printInOrder(struct AvlNode *p)
+{
+	if(!p)
+	{
+		return;
+	}
+
+	printInOrder(p->leftChild);
+	printf("%d ",p->data);
+	printInOrder(p->rightChild);
+}
+int treeHeight(struct AvlNode *p)
+{
+	if(p==NULL)return 0;
+
+	int heightOfLeft = treeHeight(p->leftChild);
+	int heightOfRight = treeHeight(p->rightChild);
+
+	return heightOfLeft > heightOfRight ? heightOfLeft+1 : heightOfRight+1;
+}
 
